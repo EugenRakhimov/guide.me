@@ -8,8 +8,16 @@ class HereMap
     uri = create_query_uri time
     res = Net::HTTP.get_response(uri)
     return 'API Query Error' unless res.is_a?(Net::HTTPSuccess)
-    nearest =  nearest_point res.body
-    puts nearest
+    boundary = points res.body
+    nearest =  nearest_point boundary
+    koordinates = Koordinate.search
+    result = koordinates_in_boundaries koordinates nearest
+  end
+
+  def self.koordinates_in_boundaries koordinates nearest
+    koordinates.each do
+      
+    end
   end
 
   def self.create_query_uri time
@@ -26,10 +34,18 @@ class HereMap
     uri
   end
 
-  def self.nearest_point body
+  def self.points body
     my_hash = JSON.parse(body)
     hash2 = my_hash["response"]["isoline"][0]
     points = hash2["component"][0]["shape"]
+  end
+
+  def self.check_point point nearest
+    return true if calculate_distance point < calculate_distance nearest
+    return false
+  end
+
+  def self.nearest_point points
     distance = 0
     nearest = ""
     points.each do |point|
