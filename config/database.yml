@@ -18,8 +18,8 @@ development:
   encoding: unicode
   database: guide_me_development
   pool:     5
-  username: inter
-  password: inter
+  username: r9accellerator
+  password:
   template: template0
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -46,8 +46,8 @@ test:
   encoding: unicode
   database: guide_me_test
   pool:     5
-  username: inter
-  password: inter
+  username: r9accellerator
+  password: 
   template: template0
 
 production:
