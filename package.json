@@ -1,0 +1,27 @@
+{
+  "name": "guide.me",
+  "version": "1.0.0",
+  "description": "Government Hack",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "nodemon": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EugenRakhimov/guide.me.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EugenRakhimov/guide.me/issues"
+  },
+  "homepage": "https://github.com/EugenRakhimov/guide.me#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "nodemon": "^1.10.0",
+    "path": "^0.12.7"
+  }
+}
