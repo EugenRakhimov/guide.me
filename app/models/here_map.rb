@@ -11,13 +11,14 @@ class HereMap
     boundary = points res.body
     nearest =  nearest_point boundary
     koordinates = Koordinate.search
-    result = koordinates_in_boundaries koordinates nearest
+    puts koordinates.count
+    result = koordinates_in_boundaries koordinates, nearest
+    puts result.count
   end
 
-  def self.koordinates_in_boundaries koordinates nearest
-    koordinates.each do
-      
-    end
+  def self.koordinates_in_boundaries koordinates, nearest
+   reduced =  koordinates.select { |koordinate|  check_point koordinate[:coordinates], nearest}
+   reduced
   end
 
   def self.create_query_uri time
@@ -40,8 +41,9 @@ class HereMap
     points = hash2["component"][0]["shape"]
   end
 
-  def self.check_point point nearest
-    return true if calculate_distance point < calculate_distance nearest
+  def self.check_point point, nearest
+    point2 = [point[1], point[0]]
+    return true if (calculate_distance(point2) < calculate_distance(nearest))
     return false
   end
 
@@ -52,11 +54,12 @@ class HereMap
       koordinates_point = point.split(",")
       current_distance = calculate_distance koordinates_point
       distance = current_distance if distance == 0
-      nearest = point if distance > current_distance
+      nearest = koordinates_point if distance > current_distance
       distance = current_distance if distance > current_distance
     end
     nearest
   end
+
   def self.calculate_distance point
     x = point[0]
     y = point[1]

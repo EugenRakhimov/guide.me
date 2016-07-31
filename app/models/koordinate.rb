@@ -20,12 +20,11 @@ class Koordinate
         :x=>174.791667,
         :y=>-37.008056,
         :max_results=>100,
-        :radius=>10000,
+        :radius=>40000,
         :geometry=>'true',
         :with_field_names=>'true'}
     uri = URI(url_string)
     uri.query = URI.encode_www_form(params)
-    puts uri
     uri
   end
 
