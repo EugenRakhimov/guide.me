@@ -22,7 +22,7 @@ class HereMap
         koordinates.each do |koordinate3|
           if((koordinate1!=koordinate2)&&(koordinate2!=koordinate3)&&(koordinate1!=koordinate3))
              route = get_route(koordinate1, koordinate2, koordinate3)
-             routes.push(route) if (route["route"][0]["summary"]["travelTime"] + (60*30)*3 < time*60*60)
+             routes.push(route["route"][0]) if (route["route"][0]["summary"]["travelTime"] + (60*30)*3 < time*60*60)
              route if (route["route"][0]["summary"]["travelTime"] + (60*30)*3 < time*60*60)
              return routes if routes.count >3
           end
