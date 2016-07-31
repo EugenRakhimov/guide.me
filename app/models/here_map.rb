@@ -11,10 +11,27 @@ class HereMap
     boundary = points res.body
     nearest =  nearest_point boundary
     koordinates = Koordinate.search
-    puts koordinates.count
-    result = koordinates_in_boundaries koordinates, nearest
-    puts result.count
+    result = koordinates_in_boundaries( koordinates, nearest)
+    calculate_routes(result, time)
   end
+
+  def self.calculate_routes koordinates, time
+    routes = []
+    koordinates.each do |koordinate1|
+      koordinates.each do |koordinate2|
+        koordinates.each do |koordinate3|
+          if((koordinate1!=koordinate2)&&(koordinate2!=koordinate3)&&(koordinate1!=koordinate3))
+             route = get_route(koordinate1, koordinate2, koordinate3)
+             routes.push(route) if (route["route"][0]["summary"]["travelTime"] + (60*30)*3 < time*60*60)
+             route if (route["route"][0]["summary"]["travelTime"] + (60*30)*3 < time*60*60)
+             return routes if routes.count >3
+          end
+        end
+      end
+    end
+
+  end
+
 
   def self.koordinates_in_boundaries koordinates, nearest
    reduced =  koordinates.select { |koordinate|  check_point koordinate[:coordinates], nearest}
@@ -65,5 +82,33 @@ class HereMap
     y = point[1]
     square = (x.to_f-(-37.008056))*(x.to_f-(-37.008056))+(y.to_f-174.791667)*(y.to_f-174.791667)
     Math.sqrt(square)
+  end
+  def self.koorinate_to_api koordinate
+    y = koordinate[:coordinates][0]
+    x = koordinate[:coordinates][1]
+    "#{x},#{y}"
+  end
+  def self.route_url waypoint1, waypoint2, waypoint3
+
+    url_string ="https://route.cit.api.here.com/routing/7.2/calculateroute.json"
+    params = {
+      :app_id=> ENV["HERE_MAP_ID"],
+      :app_code=> ENV["HERE_MAP_CODE"],
+      :waypoint0=>"geo!-37.008056,174.791667,14",
+      :waypoint1=>"geo!"+koorinate_to_api(waypoint1),
+      :waypoint2=>"geo!"+koorinate_to_api(waypoint2),
+      :waypoint3=>"geo!"+koorinate_to_api(waypoint3),
+      :waypoint4=>"geo!-37.008056,174.791667,14",
+      :mode=>"fastest;car;traffic:enabled"}
+    uri = URI(url_string)
+    uri.query = URI.encode_www_form(params)
+    uri
+  end
+
+  def self.get_route  waypoint1, waypoint2, waypoint3
+    uri = route_url  waypoint1, waypoint2, waypoint3
+    res = Net::HTTP.get_response(uri)
+    return 'API Query Error' unless res.is_a?(Net::HTTPSuccess)
+    JSON.parse(res.body)["response"]
   end
 end

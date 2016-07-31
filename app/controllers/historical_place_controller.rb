@@ -10,8 +10,8 @@ class HistoricalPlaceController < ApplicationController
 
   def search
     time_available = params[:hour]
-    HereMap.search time_available.to_i / 2
-    render :text=>"Search historical_place"
+    js = HereMap.search time_available.to_i
+    render :json=>js
   end
 
 end
