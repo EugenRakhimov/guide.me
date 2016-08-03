@@ -19,7 +19,6 @@ group :development do
 end
 gem 'bootstrap-sass'
 gem 'high_voltage'
-gem 'pg'
 gem 'simple_form'
 group :development do
   gem 'better_errors'
